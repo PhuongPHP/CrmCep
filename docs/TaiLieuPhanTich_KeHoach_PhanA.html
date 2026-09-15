@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Phần A - Phân Tích & Kế Hoạch Dự Án CRM CEP</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 15mm;
+            @bottom-right {
+                content: counter(page);
+            }
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin: 0;
+            padding: 20px 30px;
+        }
+        .header-box {
+            text-align: center;
+            border-bottom: 2px solid #00695c;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .org-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #00695c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .dept-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin: 3px 0 10px 0;
+        }
+        .doc-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d32f2f;
+            text-transform: uppercase;
+            margin: 10px 0 5px 0;
+        }
+        .sub-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #004d40;
+            margin-bottom: 8px;
+        }
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f1f8e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-bottom: 25px;
+            font-size: 12px;
+        }
+        h2 {
+            font-size: 16px;
+            color: #004d40;
+            border-left: 5px solid #00796b;
+            padding-left: 10px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        h3 {
+            font-size: 14px;
+            color: #00796b;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+        p {
+            margin: 6px 0;
+            text-align: justify;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 20px 0;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #cfd8dc;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e0f2f1;
+            color: #004d40;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .badge-core { background-color: #e3f2fd; color: #1565c0; }
+        .badge-bonus { background-color: #fce4ec; color: #c2185b; }
+        .badge-extra { background-color: #e8f5e9; color: #2e7d32; }
+        .evaluation-box {
+            background-color: #fff9c4;
+            border-left: 4px solid #fbc02d;
+            padding: 10px 15px;
+            margin: 12px 0;
+            font-size: 12px;
+            border-radius: 0 6px 6px 0;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #00695c;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-box">
+        <div class="org-title">TỔ CHỨC TÀI CHÍNH VI MÔ CEP</div>
+        <div class="dept-title">PHÒNG CÔNG NGHỆ THÔNG TIN</div>
+        <div class="doc-title">BÀI THI SƠ TUYỂN CHUYÊN VIÊN PHÁT TRIỂN PHẦN MỀM</div>
+        <div class="sub-title">PHẦN A: PHÂN TÍCH VÀ LẬP KẾ HOẠCH DỰ ÁN (BẮT BUỘC)</div>
+    </div>
+
+    <div class="meta-info">
+        <div><strong>Dự án:</strong> Mini Customer Management System</div>
+        <div><strong>Ứng viên:</strong> Đàm Văn Phương (.NET/Blazor Developer)</div>
+        <div><strong>Kỳ thi:</strong> 15/9/2026 - 18/9/2026</div>
+        <div><strong>Cam kết:</strong> Hoàn thành 24h00 17/9/2026 (Sớm 1 ngày)</div>
+    </div>
+
+    <h2>1. PHÂN TÍCH CHỨC NĂNG & GIAO DIỆN (UI)</h2>
+
+    <h3>1.1. Bối cảnh Nghiệp vụ Tài chính Vi mô CEP</h3>
+    <p>
+        Tổ chức Tài chính Vi mô CEP phục vụ đối tượng chính là công nhân, người lao động nghèo và các tiểu thương có thu nhập thấp. Trong đặc thù quản lý tín dụng và tiết kiệm vi mô, thông tin khách hàng đóng vai trò sống còn. Hệ thống CRM quản trị khách hàng yêu cầu tính toàn vẹn dữ liệu tuyệt đối, định danh chính xác qua Số điện thoại và Mã khách hàng, kiểm tra nghiêm ngặt độ tuổi tham gia giao dịch tài chính (từ đủ 18 tuổi trở lên) và bảo vệ an toàn bằng xác thực JWT.
+    </p>
+
+    <h3>1.2. Danh Mục Các Chức Năng Hệ Thống (Tổng cộng: 08 Chức năng)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 5%; text-align: center;">STT</th>
+                <th style="width: 12%;">Mã Chức Năng</th>
+                <th style="width: 22%;">Tên Chức Năng</th>
+                <th style="width: 15%;">Phân Loại</th>
+                <th>Mô Tả Nghiệp Vụ & Quy Tắc Kiểm Soát</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center;">1</td>
+                <td><strong>AUTH-01</strong></td>
+                <td>Đăng nhập hệ thống</td>
+                <td><span class="badge badge-bonus">Điểm cộng Bonus</span></td>
+                <td>Xác thực tài khoản quản trị viên (admin cứng). Cấp JWT Bearer Token (thời hạn 8h) để bảo vệ toàn bộ API và phân quyền thao tác.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">2</td>
+                <td><strong>CUST-01</strong></td>
+                <td>Xem danh sách khách hàng</td>
+                <td><span class="badge badge-core">Cốt lõi Bắt buộc</span></td>
+                <td>Hiển thị bảng lưới <code>MudDataGrid</code> với các cột: Mã KH, Họ tên, Email, SĐT, Ngày sinh, Phân loại, Trạng thái. Hỗ trợ phân trang động (10, 25, 50 dòng) và sắp xếp đa cột.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">3</td>
+                <td><strong>CUST-02</strong></td>
+                <td>Tìm kiếm & Lọc</td>
+                <td><span class="badge badge-core">Cốt lõi Bắt buộc</span></td>
+                <td>Tìm kiếm gần đúng theo <code>Họ và tên</code> hoặc <code>Số điện thoại</code> thời gian thực. Bộ lọc đa tiêu chí theo Trạng thái (Hoạt động, Tạm ngưng, Khóa) và Phân loại đối tượng.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">4</td>
+                <td><strong>CUST-03</strong></td>
+                <td>Thêm mới khách hàng</td>
+                <td><span class="badge badge-core">Cốt lõi Bắt buộc</span></td>
+                <td>Form Dialog tạo mới. Ràng buộc: Mã KH duy nhất, Họ tên từ 2-100 ký tự, SĐT đúng 10 số di động VN, Email đúng định dạng RFC, Tuổi từ đủ 18 tuổi trở lên.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">5</td>
+                <td><strong>CUST-04</strong></td>
+                <td>Cập nhật khách hàng</td>
+                <td><span class="badge badge-core">Cốt lõi Bắt buộc</span></td>
+                <td>Cập nhật thông tin cá nhân và trạng thái. Mã KH giữ cố định. Tự động ghi vết thời gian chỉnh sửa (<code>UpdatedAt</code>).</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">6</td>
+                <td><strong>CUST-05</strong></td>
+                <td>Xóa khách hàng (Xóa mềm)</td>
+                <td><span class="badge badge-core">Cốt lõi Bắt buộc</span></td>
+                <td>Áp dụng cơ chế <strong>Soft Delete</strong> (<code>IsDeleted = true</code>) kèm Dialog cảnh báo xác nhận. Không làm mất dữ liệu lịch sử tín dụng trong ngân hàng.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">7</td>
+                <td><strong>DASH-01</strong></td>
+                <td>Thống kê Dashboard KPI</td>
+                <td><span class="badge badge-extra">Giá trị gia tăng</span></td>
+                <td>04 Thẻ KPI: Tổng số khách hàng, Đang hoạt động, Tạm ngưng/Khóa, Khách hàng mới phát triển trong tháng.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">8</td>
+                <td><strong>EXCL-01</strong></td>
+                <td>Xuất báo cáo Excel</td>
+                <td><span class="badge badge-extra">Giá trị gia tăng</span></td>
+                <td>Xuất danh sách khách hàng theo bộ lọc ra file Microsoft Excel (.xlsx) chuẩn phục vụ công tác đối soát của phòng giao dịch CEP.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>1.3. Danh Sách Các Màn Hình Giao Diện (UI) (Tổng cộng: 03 Màn hình)</h3>
+    <ul>
+        <li><strong>UI-01: Màn hình Đăng nhập (Login Screen - <code>/login</code>):</strong> Thiết kế nhận diện thương hiệu CEP, input Username/Password, thông báo lỗi xác thực trực quan, tự động chuyển hướng về Dashboard sau khi đăng nhập thành công.</li>
+        <li><strong>UI-02: Màn hình Quản trị Khách hàng & Dashboard (Customer Management - <code>/customers</code>):</strong> Gồm Header điều hướng, 04 thẻ KPI số liệu, thanh công cụ tìm kiếm tức thời & lọc, và bảng dữ liệu chuyên nghiệp <code>MudDataGrid</code>.</li>
+        <li><strong>UI-03: Màn hình Hộp thoại Nghiệp vụ (Modal Dialogs):</strong> Hộp thoại Thêm/Sửa khách hàng với kiểm tra lỗi trực quan theo thời gian thực (Client-side validation) và Hộp thoại Xác nhận xóa an toàn.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>2. THIẾT KẾ CƠ SỞ DỮ LIỆU (DATABASE DESIGN)</h2>
+
+    <h3>2.1. Cấu Trúc Bảng Dữ Liệu</h3>
+    <p>Hệ thống thiết kế chuẩn hóa với 02 bảng chính đáp ứng trọn vẹn toàn bộ nghiệp vụ:</p>
+
+    <h4>Bảng 1: <code>Customers</code> (Lưu trữ hồ sơ khách hàng vi mô)</h4>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 18%;">Tên Cột</th>
+                <th style="width: 18%;">Kiểu Dữ Liệu</th>
+                <th style="width: 24%;">Ràng Buộc (Constraints)</th>
+                <th>Mục Đích Nghiệp Vụ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>Id</code></td>
+                <td><code>UNIQUEIDENTIFIER</code></td>
+                <td>Primary Key</td>
+                <td>Khóa chính định danh duy nhất</td>
+            </tr>
+            <tr>
+                <td><code>CustomerCode</code></td>
+                <td><code>NVARCHAR(20)</code></td>
+                <td>NOT NULL, <strong>UNIQUE INDEX</strong></td>
+                <td>Mã KH (VD: KH-2026-0001), không trùng lặp</td>
+            </tr>
+            <tr>
+                <td><code>FullName</code></td>
+                <td><code>NVARCHAR(100)</code></td>
+                <td>NOT NULL, <strong>INDEX</strong></td>
+                <td>Họ và tên (Đánh Index tối ưu tìm kiếm nhanh)</td>
+            </tr>
+            <tr>
+                <td><code>Email</code></td>
+                <td><code>VARCHAR(100)</code></td>
+                <td>NULL</td>
+                <td>Email liên hệ khách hàng</td>
+            </tr>
+            <tr>
+                <td><code>PhoneNumber</code></td>
+                <td><code>VARCHAR(15)</code></td>
+                <td>NOT NULL, <strong>INDEX</strong></td>
+                <td>Số điện thoại di động (Đánh Index phục vụ tìm kiếm)</td>
+            </tr>
+            <tr>
+                <td><code>DateOfBirth</code></td>
+                <td><code>DATE</code></td>
+                <td>NOT NULL</td>
+                <td>Ngày sinh (Ràng buộc tuổi từ 18 trở lên)</td>
+            </tr>
+            <tr>
+                <td><code>Segment</code></td>
+                <td><code>INT</code></td>
+                <td>NOT NULL, Default: 1</td>
+                <td>Phân loại KH (1: Công nhân, 2: Tiểu thương, 3: Tự do)</td>
+            </tr>
+            <tr>
+                <td><code>Status</code></td>
+                <td><code>INT</code></td>
+                <td>NOT NULL, Default: 1</td>
+                <td>Trạng thái (1: Hoạt động, 2: Tạm ngưng, 3: Đã khóa)</td>
+            </tr>
+            <tr>
+                <td><code>IsDeleted</code></td>
+                <td><code>BIT</code></td>
+                <td>NOT NULL, Default: 0, <strong>INDEX</strong></td>
+                <td>Cờ xóa mềm (0: Tồn tại, 1: Đã xóa mềm)</td>
+            </tr>
+            <tr>
+                <td><code>CreatedAt</code></td>
+                <td><code>DATETIME2</code></td>
+                <td>NOT NULL</td>
+                <td>Thời điểm tạo hồ sơ</td>
+            </tr>
+            <tr>
+                <td><code>UpdatedAt</code></td>
+                <td><code>DATETIME2</code></td>
+                <td>NULL</td>
+                <td>Thời điểm chỉnh sửa thông tin gần nhất</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>Bảng 2: <code>Users</code> (Quản lý Tài khoản & Phân quyền JWT)</h4>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 18%;">Tên Cột</th>
+                <th style="width: 18%;">Kiểu Dữ Liệu</th>
+                <th style="width: 24%;">Ràng Buộc</th>
+                <th>Mục Đích Nghiệp Vụ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>Id</code></td>
+                <td><code>UNIQUEIDENTIFIER</code></td>
+                <td>Primary Key</td>
+                <td>Khóa chính người dùng</td>
+            </tr>
+            <tr>
+                <td><code>Username</code></td>
+                <td><code>VARCHAR(50)</code></td>
+                <td>NOT NULL, <strong>UNIQUE INDEX</strong></td>
+                <td>Tên đăng nhập (VD: admin)</td>
+            </tr>
+            <tr>
+                <td><code>PasswordHash</code></td>
+                <td><code>NVARCHAR(MAX)</code></td>
+                <td>NOT NULL</td>
+                <td>Mật khẩu băm an toàn theo thuật toán hiện đại</td>
+            </tr>
+            <tr>
+                <td><code>FullName</code></td>
+                <td><code>NVARCHAR(100)</code></td>
+                <td>NOT NULL</td>
+                <td>Họ và tên cán bộ nhân viên</td>
+            </tr>
+            <tr>
+                <td><code>Role</code></td>
+                <td><code>VARCHAR(20)</code></td>
+                <td>NOT NULL, Default: 'Admin'</td>
+                <td>Phân quyền vai trò người dùng</td>
+            </tr>
+            <tr>
+                <td><code>IsActive</code></td>
+                <td><code>BIT</code></td>
+                <td>NOT NULL, Default: 1</td>
+                <td>Trạng thái tài khoản kích hoạt</td>
+            </tr>
+            <tr>
+                <td><code>CreatedAt</code></td>
+                <td><code>DATETIME2</code></td>
+                <td>NOT NULL</td>
+                <td>Thời điểm tạo tài khoản</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>2.2. Đánh Giá: Có Cần Sử Dụng Stored Procedure Hay Trigger Không?</h3>
+    
+    <div class="evaluation-box">
+        <strong>A. Đối với Stored Procedure:</strong><br>
+        • <em>Thực tế & Phân tích:</em> Khi phát triển trên nền tảng hiện đại <strong>Entity Framework Core Code-First</strong>, toàn bộ các truy vấn CRUD, phân trang và tìm kiếm đều được biên dịch tự động thành Parameterized SQL an toàn tuyệt đối chống SQL Injection và tái sử dụng Execution Plan tối ưu.<br>
+        • <em>Đề xuất:</em> Với bài toán Mini CRM, <strong>KHÔNG CẦN THIẾT sử dụng Stored Procedure</strong> cho các thao tác thông thường nhằm tránh việc phân mảnh logic giữa tầng ứng dụng C# và CSDL, giúp dễ dàng kiểm soát qua Git và viết Unit Test. Stored Procedure chỉ nên áp dụng khi có các báo cáo tài chính tổng hợp siêu lớn hàng chục triệu bản ghi.
+    </div>
+
+    <div class="evaluation-box">
+        <strong>B. Đối với Trigger:</strong><br>
+        • <em>Thực tế & Phân tích:</em> Trigger chạy ngầm tạo ra các tác dụng phụ (side-effects) khó debug, làm chậm các lệnh ghi hàng loạt và khó theo dõi luồng dữ liệu.<br>
+        • <em>Đề xuất:</em> <strong>KHÔNG CẦN SỬ DỤNG TRIGGER</strong>. Toàn bộ logic Soft Delete (<code>IsDeleted = true</code>) và tự động ghi vết thời gian <code>UpdatedAt</code> được xử lý tập trung, an toàn và tường minh thông qua việc ghi đè phương thức <code>SaveChangesAsync()</code> trong <code>ApplicationDbContext</code> của EF Core.
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>3. BẢNG ƯỚC LƯỢNG THỜI GIAN CHI TIẾT (ESTIMATION WBS)</h2>
+    <p>Kế hoạch được lập theo khung thời gian <strong>4 tiếng/buổi tối</strong>, đảm bảo hoàn thành sớm hơn 01 ngày (hoàn tất đêm 17/9/2026):</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 8%; text-align: center;">Mã WBS</th>
+                <th style="width: 38%;">Hạng Mục Công Việc</th>
+                <th style="width: 18%;">Vai Trò Thực Hiện</th>
+                <th style="width: 12%; text-align: center;">Ước Lượng</th>
+                <th>Sản Phẩm Đầu Ra</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #f1f8e9; font-weight: bold;">
+                <td style="text-align: center;">WBS-01</td>
+                <td>PHÂN TÍCH & LẬP KẾ HOẠCH (PHẦN A)</td>
+                <td>Team Chuyên Gia</td>
+                <td style="text-align: center;">4.0h</td>
+                <td>Tài liệu Phần A hoàn chỉnh</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">01.1</td>
+                <td>Phân tích nghiệp vụ tín dụng CEP & Ràng buộc dữ liệu</td>
+                <td>CRM Business Analyst</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Danh mục 8 tính năng, 3 màn hình UI</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">01.2</td>
+                <td>Thiết kế CSDL, đánh Index, phân tích SP & Trigger</td>
+                <td>Database Architect</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Schema CSDL 2 bảng chuẩn hóa</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">01.3</td>
+                <td>Lập bảng Estimation chi tiết theo giờ (WBS)</td>
+                <td>Project Manager</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Bảng WBS phân bổ tiến độ</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">01.4</td>
+                <td>Định dạng tài liệu & xuất bản file PDF chính thức</td>
+                <td>Documentation Lead</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>File PDF nộp kèm tuyển dụng</td>
+            </tr>
+
+            <tr style="background-color: #f1f8e9; font-weight: bold;">
+                <td style="text-align: center;">WBS-02</td>
+                <td>THIẾT LẬP KIẾN TRÚC & CSDL (.NET 8 BACKEND)</td>
+                <td>Team Kỹ Thuật</td>
+                <td style="text-align: center;">4.0h</td>
+                <td>Bộ khung Solution & Migration</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">02.1</td>
+                <td>Khởi tạo Solution Clean Architecture 4 tầng (.NET 8)</td>
+                <td>System Architect</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Solution <code>CrmCep.sln</code> chuẩn mực</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">02.2</td>
+                <td>Xây dựng Domain Entities, Enums, BaseEntity</td>
+                <td>Senior .NET Dev</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Lớp thực thể chuẩn OOP</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">02.3</td>
+                <td>Cấu hình EF Core DbContext, Fluent API, Indexing</td>
+                <td>Database Architect</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Cấu hình SQL Server + PostgreSQL</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">02.4</td>
+                <td>Tạo Initial Migration & Nạp dữ liệu mẫu (Seed Data)</td>
+                <td>Senior .NET Dev</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>CSDL hoạt động trên SQL Server</td>
+            </tr>
+
+            <tr style="background-color: #f1f8e9; font-weight: bold;">
+                <td style="text-align: center;">WBS-03</td>
+                <td>TRIỂN KHAI REST API & XÁC THỰC JWT</td>
+                <td>Team Backend</td>
+                <td style="text-align: center;">4.0h</td>
+                <td>Hệ thống API hoàn chỉnh 100%</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">03.1</td>
+                <td>Xây dựng Auth Service & JWT Token Generator (Bonus)</td>
+                <td>Security Architect</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Endpoint <code>/api/auth/login</code></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">03.2</td>
+                <td>Xây dựng Customer CRUD API (Xem, Thêm, Sửa, Xóa)</td>
+                <td>Senior .NET Dev</td>
+                <td style="text-align: center;">1.5h</td>
+                <td>Endpoints CRUD Khách hàng</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">03.3</td>
+                <td>Xây dựng Tìm kiếm Tên/SĐT, Lọc Trạng thái & Phân trang</td>
+                <td>Senior .NET Dev</td>
+                <td style="text-align: center;">0.5h</td>
+                <td>Tìm kiếm tức thời & phân trang</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">03.4</td>
+                <td>FluentValidation, Global Exception Middleware & Postman</td>
+                <td>Code Review & QA</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Postman Collection JSON</td>
+            </tr>
+
+            <tr style="background-color: #f1f8e9; font-weight: bold;">
+                <td style="text-align: center;">WBS-04</td>
+                <td>TRIỂN KHAI GIAO DIỆN BLAZOR & MUDBLAZOR</td>
+                <td>Team Frontend</td>
+                <td style="text-align: center;">4.0h</td>
+                <td>Giao diện Web mượt mà, đẹp mắt</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">04.1</td>
+                <td>Tích hợp MudBlazor & tùy biến Theme CEP Branding</td>
+                <td>UI/UX Developer</td>
+                <td style="text-align: center;">0.5h</td>
+                <td>Layout Dashboard & Theme</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">04.2</td>
+                <td>Xây dựng Màn hình Đăng nhập JWT & Token Storage</td>
+                <td>Senior .NET Dev</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Luồng Authentication Blazor</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">04.3</td>
+                <td>Xây dựng Bảng MudDataGrid Khách hàng (Search, Filter)</td>
+                <td>Senior .NET Dev</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>Bảng DataGrid chuyên nghiệp</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">04.4</td>
+                <td>Xây dựng Dialog Thêm/Sửa Khách hàng (Validation UI)</td>
+                <td>Senior .NET Dev</td>
+                <td style="text-align: center;">0.75h</td>
+                <td>Popup nhập liệu trực quan</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">04.5</td>
+                <td>Xây dựng Dialog Xác nhận Xóa (Soft Delete) & Toast</td>
+                <td>Senior .NET Dev</td>
+                <td style="text-align: center;">0.75h</td>
+                <td>Popup xác nhận an toàn</td>
+            </tr>
+
+            <tr style="background-color: #f1f8e9; font-weight: bold;">
+                <td style="text-align: center;">WBS-05</td>
+                <td>ĐÓNG GÓI, README.MD & BÀN GIAO</td>
+                <td>Team Tổng Hợp</td>
+                <td style="text-align: center;">2.0h</td>
+                <td>Bộ sản phẩm sẵn sàng nộp bài</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">05.1</td>
+                <td>Viết file README.md toàn diện theo chuẩn đề thi CEP</td>
+                <td>Technical Writer</td>
+                <td style="text-align: center;">1.0h</td>
+                <td>File README.md chất lượng cao</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">05.2</td>
+                <td>Biên soạn tài liệu Hướng dẫn Cài đặt & HDSD dạng PDF</td>
+                <td>Documentation Lead</td>
+                <td style="text-align: center;">0.5h</td>
+                <td>File PDF hướng dẫn sử dụng</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">05.3</td>
+                <td>Review Code sạch (English Comments) & Push Git nhánh dev</td>
+                <td>Code Review & QA</td>
+                <td style="text-align: center;">0.5h</td>
+                <td>Source code đẩy đủ trên GitHub</td>
+            </tr>
+            <tr style="background-color: #e0f2f1; font-weight: bold; font-size: 13px;">
+                <td colspan="3" style="text-align: right; padding-right: 15px;">TỔNG THỜI GIAN THỰC HIỆN:</td>
+                <td style="text-align: center; color: #d32f2f;">18.0 Giờ</td>
+                <td style="color: #004d40;">HOÀN TẤT ĐÊM 17/9 (SỚM 1 NGÀY)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 30px; text-align: right; padding-right: 20px;">
+        <p style="margin: 0; font-style: italic;">TP. Hồ Chí Minh, ngày 15 tháng 09 năm 2026</p>
+        <p style="margin: 5px 0 0 0; font-weight: bold; text-transform: uppercase; color: #004d40;">Người Lập Kế Hoạch</p>
+        <p style="margin: 40px 0 0 0; font-weight: bold;">Đàm Văn Phương</p>
+        <p style="margin: 2px 0 0 0; font-size: 11px; color: #666;">Ứng viên Vị trí .NET/Blazor Developer</p>
+    </div>
+
+</body>
+</html>
