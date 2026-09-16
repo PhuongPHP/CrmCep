@@ -1,6 +1,31 @@
-﻿<Router AppAssembly="typeof(Program).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
-        <FocusOnNavigate RouteData="routeData" Selector="h1" />
-    </Found>
-</Router>
+<CascadingAuthenticationState>
+    <Router AppAssembly="typeof(Program).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
+                <NotAuthorized>
+                    <LayoutView Layout="typeof(Layout.MainLayout)">
+                        <div class="pa-8 text-center">
+                            <MudText Typo="Typo.h5" Color="Color.Warning" Class="mb-3">Yêu Cầu Quyền Truy Cập</MudText>
+                            <MudText Typo="Typo.body1" Class="mb-4">Bạn chưa đăng nhập hoặc không có quyền truy cập vào chức năng này.</MudText>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/login">
+                                Đăng Nhập Hệ Thống
+                            </MudButton>
+                        </div>
+                    </LayoutView>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="typeof(Layout.MainLayout)">
+                <div class="pa-8 text-center">
+                    <MudText Typo="Typo.h5" Color="Color.Error" Class="mb-3">Không Tìm Thấy Trang (404)</MudText>
+                    <MudText Typo="Typo.body1" Class="mb-4">Đường dẫn bạn yêu cầu không tồn tại trong hệ thống CRM CEP.</MudText>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/">
+                        Quay Lại Trang Chủ
+                    </MudButton>
+                </div>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

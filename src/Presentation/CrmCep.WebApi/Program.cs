@@ -1,4 +1,5 @@
 using System.Text;
+using CrmCep.Application;
 using CrmCep.Infrastructure;
 using CrmCep.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Add Controllers
 builder.Services.AddControllers();
 
-// 2. Add Infrastructure Services (ApplicationDbContext, Repositories, JWT)
+// 2. Add Application & Infrastructure Services
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 // 3. Configure CORS policy for frontend client integration
@@ -123,6 +125,10 @@ app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Automatically redirect root path to Swagger documentation
+app.MapGet("/", () => Results.Redirect("/swagger"))
+    .ExcludeFromDescription();
 
 app.MapControllers();
 

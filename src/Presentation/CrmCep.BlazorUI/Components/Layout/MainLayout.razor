@@ -1,23 +1,90 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+@inject ICustomerApiClient ApiClient
+@inject ISnackbar Snackbar
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IConfiguration Configuration
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudThemeProvider Theme="_cepTheme" @bind-IsDarkMode="_isDarkMode" />
+<MudPopoverProvider />
+<MudDialogProvider FullWidth="true" MaxWidth="MaxWidth.Medium" CloseButton="true" />
+<MudSnackbarProvider />
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+<MudLayout>
+    <MudAppBar Elevation="2" Color="Color.Primary" Dense="false">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(() => _drawerOpen = !_drawerOpen)" />
+        <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Class="mr-2" />
+        <MudText Typo="Typo.h6" Class="font-weight-bold">CEP MICROFINANCE CRM</MudText>
+        <MudSpacer />
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <AuthorizeView>
+            <Authorized>
+                <MudChip T="string" Color="Color.Success" Variant="Variant.Filled" Size="Size.Small" Icon="@Icons.Material.Filled.VerifiedUser">
+                    @context.User.Identity?.Name (Quản Trị Viên)
+                </MudChip>
+                <MudTooltip Text="Chuyển đổi Sáng / Tối">
+                    <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" 
+                                   Color="Color.Inherit" OnClick="@(() => _isDarkMode = !_isDarkMode)" />
+                </MudTooltip>
+                <MudButton Variant="Variant.Outlined" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Logout" OnClick="HandleLogout" Class="ml-2">
+                    Đăng xuất
+                </MudButton>
+            </Authorized>
+            <NotAuthorized>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Login" Href="/login">
+                    Đăng nhập
+                </MudButton>
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudAppBar>
 
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <MudNavMenu Class="pa-2">
+            <MudText Typo="Typo.caption" Class="px-4 py-2 mud-text-secondary font-weight-bold">ĐIỀU HƯỚNG CHÍNH</MudText>
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Tổng Quan CRM</MudNavLink>
+            <MudNavLink Href="/customers" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PeopleAlt">Quản Lý Khách Hàng</MudNavLink>
+            <MudDivider Class="my-3" />
+            <MudText Typo="Typo.caption" Class="px-4 py-2 mud-text-secondary font-weight-bold">TÀI LIỆU DỰ ÁN</MudText>
+            <MudNavLink Href="@_swaggerUrl" Target="_blank" Icon="@Icons.Material.Filled.Api">Swagger Web API</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent Class="pa-4 pa-md-6" Style="background-color: var(--mud-palette-background-grey); min-height: 100vh;">
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+    private bool _isDarkMode = false;
+    private string _swaggerUrl => $"{Configuration["WebApiBaseUrl"]?.TrimEnd('/') ?? "http://localhost:5034"}/swagger";
+
+    private readonly MudTheme _cepTheme = new()
+    {
+        PaletteLight = new PaletteLight
+        {
+            Primary = "#00695C",          // CEP Signature Teal Green
+            Secondary = "#E65100",        // Deep Orange Accent
+            AppbarBackground = "#004D40", // Deep Teal
+            Background = "#F5F7FA",
+            Surface = "#FFFFFF",
+            DrawerBackground = "#FFFFFF",
+            ActionDefault = "#00695C"
+        },
+        PaletteDark = new PaletteDark
+        {
+            Primary = "#26A69A",
+            Secondary = "#FF9800",
+            AppbarBackground = "#1A252C",
+            Background = "#121A20",
+            Surface = "#1E293B"
+        }
+    };
+
+    private async Task HandleLogout()
+    {
+        await ApiClient.LogoutAsync();
+        Snackbar.Add("Đã đăng xuất khỏi hệ thống thành công.", Severity.Info);
+        Navigation.NavigateTo("/login", forceLoad: true);
+    }
+}

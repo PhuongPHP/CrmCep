@@ -1,0 +1,231 @@
+@inject ICustomerApiClient ApiClient
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+        <div class="d-flex align-center">
+            <MudIcon Icon="@(IsEdit ? Icons.Material.Filled.Edit : Icons.Material.Filled.PersonAdd)" Color="Color.Primary" Class="mr-2" />
+            <MudText Typo="Typo.h6">@(IsEdit ? "CẬP NHẬT THÔNG TIN KHÁCH HÀNG" : "THÊM MỚI KHÁCH HÀNG CEP")</MudText>
+        </div>
+    </TitleContent>
+    <DialogContent>
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Class="mb-4" ShowCloseIcon="true" CloseIconClicked="() => _errorMessage = null">
+                @_errorMessage
+            </MudAlert>
+        }
+
+        <MudForm @ref="_form" @bind-IsValid="@_isValid">
+            <MudGrid Spacing="2">
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Model.CustomerCode" 
+                                  Label="Mã Khách Hàng" 
+                                  Required="true" 
+                                  RequiredError="Mã khách hàng là bắt buộc" 
+                                  ReadOnly="@IsEdit" 
+                                  Variant="Variant.Outlined" 
+                                  Margin="Margin.Dense"
+                                  HelperText="@(IsEdit ? "Mã khách hàng không thể thay đổi" : "Ví dụ: KH-2026-0006")" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Model.FullName" 
+                                  Label="Họ và Tên" 
+                                  Required="true" 
+                                  RequiredError="Họ và tên là bắt buộc" 
+                                  Variant="Variant.Outlined" 
+                                  Margin="Margin.Dense" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Model.PhoneNumber" 
+                                  Label="Số Điện Thoại (10 chữ số)" 
+                                  Required="true" 
+                                  RequiredError="Số điện thoại là bắt buộc" 
+                                  Validation="@(new Func<string, string?>(ValidatePhoneNumber))"
+                                  Variant="Variant.Outlined" 
+                                  Margin="Margin.Dense" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Model.Email" 
+                                  Label="Hộp Thư Email" 
+                                  Validation="@(new Func<string, string?>(ValidateEmail))"
+                                  Variant="Variant.Outlined" 
+                                  Margin="Margin.Dense" />
+                </MudItem>
+
+                <MudItem xs="12" sm="6">
+                    <MudDatePicker Label="Ngày Sinh (Yêu cầu >= 18 tuổi)" 
+                                   @bind-Date="_selectedDate" 
+                                   Required="true" 
+                                   RequiredError="Ngày sinh là bắt buộc"
+                                   MaxDate="@DateTime.Today.AddYears(-18)"
+                                   DateFormat="dd/MM/yyyy"
+                                   Variant="Variant.Outlined" 
+                                   Margin="Margin.Dense" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudSelect @bind-Value="Model.Segment" Label="Phân Loại Đối Tượng" Variant="Variant.Outlined" Margin="Margin.Dense">
+                        <MudSelectItem Value="CustomerSegment.Worker">Công nhân lao động</MudSelectItem>
+                        <MudSelectItem Value="CustomerSegment.MicroMerchant">Tiểu thương buôn bán</MudSelectItem>
+                        <MudSelectItem Value="CustomerSegment.Freelancer">Lao động tự do</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="6">
+                    <MudSelect @bind-Value="Model.Status" Label="Trạng Thái Hoạt Động" Variant="Variant.Outlined" Margin="Margin.Dense">
+                        <MudSelectItem Value="CustomerStatus.Active">Đang hoạt động</MudSelectItem>
+                        <MudSelectItem Value="CustomerStatus.Suspended">Tạm ngưng</MudSelectItem>
+                        <MudSelectItem Value="CustomerStatus.Locked">Đã khóa</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Model.Address" Label="Địa Chỉ Cư Trú / Làm Việc" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="Model.Notes" Label="Ghi Chú Hồ Sơ Tín Dụng" Lines="2" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Text">Hủy Bỏ</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Submit" Disabled="@_isSubmitting">
+            @if (_isSubmitting)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <span class="ms-2">Đang lưu...</span>
+            }
+            else
+            {
+                <span>@(IsEdit ? "Cập Nhật" : "Lưu Hồ Sơ")</span>
+            }
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter]
+    public bool IsEdit { get; set; }
+
+    [Parameter]
+    public CustomerDto? ExistingCustomer { get; set; }
+
+    private CreateCustomerDto Model { get; set; } = new();
+    private DateTime? _selectedDate;
+    private MudForm _form = default!;
+    private bool _isValid;
+    private bool _isSubmitting;
+    private string? _errorMessage;
+
+    protected override void OnInitialized()
+    {
+        if (IsEdit && ExistingCustomer != null)
+        {
+            Model = new CreateCustomerDto
+            {
+                CustomerCode = ExistingCustomer.CustomerCode,
+                FullName = ExistingCustomer.FullName,
+                Email = ExistingCustomer.Email,
+                PhoneNumber = ExistingCustomer.PhoneNumber,
+                DateOfBirth = ExistingCustomer.DateOfBirth,
+                Segment = ExistingCustomer.Segment,
+                Status = ExistingCustomer.Status,
+                Address = ExistingCustomer.Address,
+                Notes = ExistingCustomer.Notes
+            };
+            _selectedDate = new DateTime(ExistingCustomer.DateOfBirth.Year, ExistingCustomer.DateOfBirth.Month, ExistingCustomer.DateOfBirth.Day);
+        }
+        else
+        {
+            // Auto generate code prefix
+            Model.CustomerCode = $"KH-{DateTime.Now:yyyy}-{Random.Shared.Next(1000, 9999)}";
+            _selectedDate = DateTime.Today.AddYears(-25);
+        }
+    }
+
+    private string? ValidatePhoneNumber(string phone)
+    {
+        if (string.IsNullOrWhiteSpace(phone)) return "Số điện thoại không được để trống.";
+        if (!System.Text.RegularExpressions.Regex.IsMatch(phone, @"^(03|05|07|08|09)\d{8}$"))
+        {
+            return "Số điện thoại phải là số di động 10 chữ số tại Việt Nam (đầu 03, 05, 07, 08, 09).";
+        }
+        return null;
+    }
+
+    private string? ValidateEmail(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email)) return null;
+        if (!new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(email))
+        {
+            return "Định dạng email không hợp lệ.";
+        }
+        return null;
+    }
+
+    private async Task Submit()
+    {
+        await _form.ValidateAsync();
+        if (!_isValid || !_selectedDate.HasValue) return;
+
+        Model.DateOfBirth = DateOnly.FromDateTime(_selectedDate.Value);
+        _isSubmitting = true;
+        _errorMessage = null;
+
+        if (IsEdit && ExistingCustomer != null)
+        {
+            var updateDto = new UpdateCustomerDto
+            {
+                FullName = Model.FullName,
+                Email = Model.Email,
+                PhoneNumber = Model.PhoneNumber,
+                DateOfBirth = Model.DateOfBirth,
+                Segment = Model.Segment,
+                Status = Model.Status,
+                Address = Model.Address,
+                Notes = Model.Notes
+            };
+
+            var response = await ApiClient.UpdateCustomerAsync(ExistingCustomer.Id, updateDto);
+            if (response.Success)
+            {
+                Snackbar.Add("Cập nhật thông tin khách hàng thành công!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+            else
+            {
+                _errorMessage = response.Message;
+                if (response.Errors != null && response.Errors.Count > 0)
+                {
+                    _errorMessage += " " + string.Join("; ", response.Errors);
+                }
+            }
+        }
+        else
+        {
+            var response = await ApiClient.CreateCustomerAsync(Model);
+            if (response.Success)
+            {
+                Snackbar.Add("Thêm mới khách hàng thành công!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+            else
+            {
+                _errorMessage = response.Message;
+                if (response.Errors != null && response.Errors.Count > 0)
+                {
+                    _errorMessage += " " + string.Join("; ", response.Errors);
+                }
+            }
+        }
+
+        _isSubmitting = false;
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

@@ -1,0 +1,379 @@
+@page "/customers"
+@inject ICustomerApiClient ApiClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<PageTitle>Quản Lý Khách Hàng - CEP CRM</PageTitle>
+
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="d-flex flex-column align-center justify-center py-12">
+            <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Warning" Size="Size.Large" Class="mb-4" />
+            <MudText Typo="Typo.h5" Class="mb-2">Bạn cần đăng nhập để truy cập hệ thống</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">Vui lòng sử dụng tài khoản quản trị để thực hiện các thao tác quản lý khách hàng.</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Login" Href="/login">
+                Đăng Nhập Ngay
+            </MudButton>
+        </div>
+    </NotAuthorized>
+    <Authorized>
+        <div class="d-flex justify-space-between align-center mb-4">
+            <div>
+                <MudText Typo="Typo.h5" Class="font-weight-bold" Color="Color.Primary">
+                    QUẢN LÝ DANH SÁCH KHÁCH HÀNG
+                </MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                    Tra cứu thông tin, thêm mới hồ sơ, chỉnh sửa và quản lý tình trạng khách hàng CEP.
+                </MudText>
+            </div>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Dashboard" Href="/">
+                Xem Tổng Quan CRM
+            </MudButton>
+        </div>
+
+        <!-- 1. KPI Dashboard Summary Cards -->
+        <MudGrid Class="mb-4">
+            <MudItem xs="12" sm="6" md="3">
+                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #00695C; border-radius: 8px;">
+                    <div>
+                        <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">TỔNG KHÁCH HÀNG</MudText>
+                        <MudText Typo="Typo.h4" Class="font-weight-bold mt-1">@(_stats?.TotalCustomers ?? 0)</MudText>
+                    </div>
+                    <MudAvatar Color="Color.Primary" Variant="Variant.Filled">
+                        <MudIcon Icon="@Icons.Material.Filled.People" />
+                    </MudAvatar>
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3">
+                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #2E7D32; border-radius: 8px;">
+                    <div>
+                        <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">ĐANG HOẠT ĐỘNG</MudText>
+                        <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-success">@(_stats?.ActiveCustomers ?? 0)</MudText>
+                    </div>
+                    <MudAvatar Color="Color.Success" Variant="Variant.Filled">
+                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" />
+                    </MudAvatar>
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3">
+                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #F57C00; border-radius: 8px;">
+                    <div>
+                        <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">TẠM NGƯNG / KHÓA</MudText>
+                        <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-warning">@((_stats?.SuspendedCustomers ?? 0) + (_stats?.LockedCustomers ?? 0))</MudText>
+                    </div>
+                    <MudAvatar Color="Color.Warning" Variant="Variant.Filled">
+                        <MudIcon Icon="@Icons.Material.Filled.PauseCircle" />
+                    </MudAvatar>
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3">
+                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #0288D1; border-radius: 8px;">
+                    <div>
+                        <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">MỚI TRONG THÁNG</MudText>
+                        <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-info">@(_stats?.NewCustomersThisMonth ?? 0)</MudText>
+                    </div>
+                    <MudAvatar Color="Color.Info" Variant="Variant.Filled">
+                        <MudIcon Icon="@Icons.Material.Filled.PersonAdd" />
+                    </MudAvatar>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+        <!-- 2. Action & Filter Bar -->
+        <MudCard Elevation="2" Class="mb-4 pa-3" Style="border-radius: 8px;">
+            <MudGrid Spacing="2" Class="align-center">
+                <MudItem xs="12" sm="4" md="4">
+                    <MudTextField @bind-Value="_filter.Keyword" 
+                                  Placeholder="Tìm theo Họ tên hoặc Số điện thoại..." 
+                                  Adornment="Adornment.Start" 
+                                  AdornmentIcon="@Icons.Material.Filled.Search" 
+                                  Variant="Variant.Outlined" 
+                                  Margin="Margin.Dense" 
+                                  Immediate="false" 
+                                  OnKeyUp="@OnSearchKeyUp" />
+                </MudItem>
+
+                <MudItem xs="6" sm="3" md="2">
+                    <MudSelect T="CustomerStatus?" Value="_filter.Status" ValueChanged="OnStatusChanged" Label="Trạng thái" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true">
+                        <MudSelectItem T="CustomerStatus?" Value="@((CustomerStatus?)null)">Tất cả</MudSelectItem>
+                        <MudSelectItem T="CustomerStatus?" Value="@((CustomerStatus?)CustomerStatus.Active)">Đang hoạt động</MudSelectItem>
+                        <MudSelectItem T="CustomerStatus?" Value="@((CustomerStatus?)CustomerStatus.Suspended)">Tạm ngưng</MudSelectItem>
+                        <MudSelectItem T="CustomerStatus?" Value="@((CustomerStatus?)CustomerStatus.Locked)">Đã khóa</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="6" sm="3" md="2">
+                    <MudSelect T="CustomerSegment?" Value="_filter.Segment" ValueChanged="OnSegmentChanged" Label="Phân loại" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true">
+                        <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)null)">Tất cả</MudSelectItem>
+                        <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)CustomerSegment.Worker)">Công nhân</MudSelectItem>
+                        <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)CustomerSegment.MicroMerchant)">Tiểu thương</MudSelectItem>
+                        <MudSelectItem T="CustomerSegment?" Value="@((CustomerSegment?)CustomerSegment.Freelancer)">Lao động tự do</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="4" Class="d-flex justify-end gap-2">
+                    <MudButton Variant="Variant.Filled" 
+                               Color="Color.Primary" 
+                               StartIcon="@Icons.Material.Filled.AddCircle" 
+                               OnClick="OpenAddDialog">
+                        Thêm Khách Hàng
+                    </MudButton>
+                    <MudButton Variant="Variant.Outlined" 
+                               Color="Color.Success" 
+                               StartIcon="@Icons.Material.Filled.Download" 
+                               OnClick="ExportToExcel">
+                        Xuất Excel
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudCard>
+
+        <!-- 3. Customer Data Table (MudTable) -->
+        <MudTable Items="@_customers" 
+                  Dense="true" 
+                  Hover="true" 
+                  Bordered="true" 
+                  Striped="true" 
+                  Loading="@_isLoading" 
+                  Elevation="2" 
+                  Style="border-radius: 8px;">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6" Class="font-weight-bold">DANH SÁCH HỒ SƠ KHÁCH HÀNG</MudText>
+                <MudSpacer />
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">Tổng số bản ghi: <strong>@_totalCount</strong></MudText>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh><MudTableSortLabel SortBy="new Func<CustomerDto, object>(x => x.CustomerCode)">Mã KH</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<CustomerDto, object>(x => x.FullName)">Họ và Tên</MudTableSortLabel></MudTh>
+                <MudTh>Số Điện Thoại</MudTh>
+                <MudTh>Hộp Thư Email</MudTh>
+                <MudTh>Ngày Sinh</MudTh>
+                <MudTh>Phân Loại</MudTh>
+                <MudTh>Trạng Thái</MudTh>
+                <MudTh Style="text-align: center;">Thao Tác</MudTh>
+            </HeaderContent>
+            <RowTemplate Context="customer">
+                <MudTd DataLabel="Mã KH">
+                    <MudChip T="string" Size="Size.Small" Color="Color.Dark" Variant="Variant.Text"><strong>@customer.CustomerCode</strong></MudChip>
+                </MudTd>
+                <MudTd DataLabel="Họ và Tên"><strong>@customer.FullName</strong></MudTd>
+                <MudTd DataLabel="Số Điện Thoại">
+                    <div class="d-flex align-center">
+                        <MudIcon Icon="@Icons.Material.Filled.Phone" Size="Size.Small" Color="Color.Primary" Class="mr-1" />
+                        <span>@customer.PhoneNumber</span>
+                    </div>
+                </MudTd>
+                <MudTd DataLabel="Hộp Thư Email">@(customer.Email ?? "—")</MudTd>
+                <MudTd DataLabel="Ngày Sinh">@customer.DateOfBirth.ToString("dd/MM/yyyy")</MudTd>
+                <MudTd DataLabel="Phân Loại">
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetSegmentColor(customer.Segment)">
+                        @GetSegmentName(customer.Segment)
+                    </MudChip>
+                </MudTd>
+                <MudTd DataLabel="Trạng Thái">
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Filled" Color="@GetStatusColor(customer.Status)">
+                        @GetStatusName(customer.Status)
+                    </MudChip>
+                </MudTd>
+                <MudTd DataLabel="Thao Tác" Style="text-align: center;">
+                    <MudTooltip Text="Chỉnh sửa thông tin">
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" OnClick="@(() => OpenEditDialog(customer))" />
+                    </MudTooltip>
+                    <MudTooltip Text="Xóa khách hàng">
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => OpenDeleteDialog(customer))" />
+                    </MudTooltip>
+                </MudTd>
+            </RowTemplate>
+            <NoRecordsContent>
+                <div class="pa-4 text-center">
+                    <MudText Typo="Typo.body1" Class="mud-text-secondary">Không tìm thấy khách hàng nào phù hợp với điều kiện tìm kiếm.</MudText>
+                </div>
+            </NoRecordsContent>
+            <LoadingContent>
+                <div class="pa-4 text-center">
+                    <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+                    <MudText Typo="Typo.body2" Class="mt-2">Đang tải dữ liệu khách hàng...</MudText>
+                </div>
+            </LoadingContent>
+            <PagerContent>
+                <MudPagination SelectedChanged="OnPageChanged" 
+                               Count="@((int)Math.Ceiling((double)_totalCount / _filter.PageSize))" 
+                               Class="pa-4 justify-center" />
+            </PagerContent>
+        </MudTable>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    private List<CustomerDto> _customers = [];
+    private CustomerFilterDto _filter = new() { PageIndex = 1, PageSize = 10 };
+    private DashboardSummaryDto? _stats;
+    private int _totalCount;
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _isLoading = true;
+        try
+        {
+            var statsTask = ApiClient.GetDashboardStatsAsync();
+            var customersTask = ApiClient.GetCustomersAsync(_filter);
+
+            await Task.WhenAll(statsTask, customersTask);
+
+            var statsRes = await statsTask;
+            if (statsRes.Success) _stats = statsRes.Data;
+
+            var custRes = await customersTask;
+            if (custRes.Success && custRes.Data != null)
+            {
+                _customers = custRes.Data.Items;
+                _totalCount = custRes.Data.TotalCount;
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Lưu ý: {ex.Message}", Severity.Info);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task OnSearchKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            _filter.PageIndex = 1;
+            await LoadData();
+        }
+    }
+
+    private async Task OnStatusChanged(CustomerStatus? status)
+    {
+        _filter.Status = status;
+        _filter.PageIndex = 1;
+        await LoadData();
+    }
+
+    private async Task OnSegmentChanged(CustomerSegment? segment)
+    {
+        _filter.Segment = segment;
+        _filter.PageIndex = 1;
+        await LoadData();
+    }
+
+    private async Task OnPageChanged(int newPage)
+    {
+        _filter.PageIndex = newPage;
+        await LoadData();
+    }
+
+    private async Task OpenAddDialog()
+    {
+        var parameters = new DialogParameters { ["IsEdit"] = false };
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = await DialogService.ShowAsync<CustomerDialog>("Thêm Mới Khách Hàng", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is { Canceled: false })
+        {
+            await LoadData();
+        }
+    }
+
+    private async Task OpenEditDialog(CustomerDto customer)
+    {
+        var parameters = new DialogParameters
+        {
+            ["IsEdit"] = true,
+            ["ExistingCustomer"] = customer
+        };
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+        var dialog = await DialogService.ShowAsync<CustomerDialog>("Chỉnh Sửa Khách Hàng", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is { Canceled: false })
+        {
+            await LoadData();
+        }
+    }
+
+    private async Task OpenDeleteDialog(CustomerDto customer)
+    {
+        var parameters = new DialogParameters
+        {
+            ["CustomerId"] = customer.Id,
+            ["CustomerCode"] = customer.CustomerCode,
+            ["CustomerName"] = customer.FullName
+        };
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Small };
+        var dialog = await DialogService.ShowAsync<DeleteConfirmDialog>("Xác Nhận Xóa", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is { Canceled: false })
+        {
+            await LoadData();
+        }
+    }
+
+    private async Task ExportToExcel()
+    {
+        try
+        {
+            Snackbar.Add("Đang khởi tạo tệp Excel...", Severity.Info);
+            var bytes = await ApiClient.ExportExcelAsync(_filter);
+            var base64 = Convert.ToBase64String(bytes);
+            var fileName = $"Danh_Sach_Khach_Hang_CEP_{DateTime.Now:yyyyMMdd_HHmm}.xlsx";
+            await JS.InvokeVoidAsync("downloadFileFromBase64", fileName, base64);
+            Snackbar.Add("Đã tải xuống file Excel thành công!", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Lỗi khi xuất file Excel: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private static Color GetStatusColor(CustomerStatus status) => status switch
+    {
+        CustomerStatus.Active => Color.Success,
+        CustomerStatus.Suspended => Color.Warning,
+        CustomerStatus.Locked => Color.Error,
+        _ => Color.Default
+    };
+
+    private static string GetStatusName(CustomerStatus status) => status switch
+    {
+        CustomerStatus.Active => "Đang hoạt động",
+        CustomerStatus.Suspended => "Tạm ngưng",
+        CustomerStatus.Locked => "Đã khóa",
+        _ => "Không xác định"
+    };
+
+    private static Color GetSegmentColor(CustomerSegment segment) => segment switch
+    {
+        CustomerSegment.Worker => Color.Primary,
+        CustomerSegment.MicroMerchant => Color.Warning,
+        CustomerSegment.Freelancer => Color.Info,
+        _ => Color.Default
+    };
+
+    private static string GetSegmentName(CustomerSegment segment) => segment switch
+    {
+        CustomerSegment.Worker => "Công nhân",
+        CustomerSegment.MicroMerchant => "Tiểu thương",
+        CustomerSegment.Freelancer => "Lao động tự do",
+        _ => "Khác"
+    };
+}

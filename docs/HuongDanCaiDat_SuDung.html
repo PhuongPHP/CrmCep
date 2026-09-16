@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Cài Đặt, Chạy Source Code & Sử Dụng Phần Mềm - CRM CEP</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 15mm;
+            @bottom-right {
+                content: counter(page);
+            }
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin: 0;
+            padding: 20px 30px;
+        }
+        .header-box {
+            text-align: center;
+            border-bottom: 2px solid #00695c;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .org-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #00695c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .dept-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin: 3px 0 10px 0;
+        }
+        .doc-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #d32f2f;
+            text-transform: uppercase;
+            margin: 10px 0 5px 0;
+        }
+        .sub-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #004d40;
+            margin-bottom: 8px;
+        }
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f1f8e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-bottom: 25px;
+            font-size: 12px;
+        }
+        h2 {
+            font-size: 16px;
+            color: #004d40;
+            border-left: 5px solid #00796b;
+            padding-left: 10px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        h3 {
+            font-size: 14px;
+            color: #00796b;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+        p {
+            margin: 6px 0;
+            text-align: justify;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 20px 0;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #cfd8dc;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e0f2f1;
+            color: #004d40;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        .code-box {
+            background-color: #263238;
+            color: #eceff1;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            margin: 8px 0 12px 0;
+            overflow-x: auto;
+        }
+        .step-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #43a047;
+            padding: 10px 15px;
+            margin: 12px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-box">
+        <div class="org-title">TỔ CHỨC TÀI CHÍNH VI MÔ CEP</div>
+        <div class="dept-title">PHÒNG CÔNG NGHỆ THÔNG TIN</div>
+        <div class="doc-title">TÀI LIỆU HƯỚNG DẪN CÀI ĐẶT, CHẠY NGUỒN & SỬ DỤNG</div>
+        <div class="sub-title">HỆ THỐNG QUẢN LÝ KHÁCH HÀNG CƠ BẢN (MINI CRM CEP)</div>
+    </div>
+
+    <div class="meta-info">
+        <div><strong>Dự án:</strong> Mini Customer Management System</div>
+        <div><strong>Ứng viên:</strong> Đàm Văn Phương (.NET/Blazor Developer)</div>
+        <div><strong>Kỳ thi:</strong> 15/9/2026 - 18/9/2026</div>
+        <div><strong>Nền tảng:</strong> .NET 8 / Blazor / SQL Server</div>
+    </div>
+
+    <h2>1. YÊU CẦU MÔI TRƯỜNG & CÔNG CỤ CẦN THIẾT</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Thành Phần</th>
+                <th style="width: 25%;">Yêu Cầu Phiên Bản</th>
+                <th>Mô Tả & Hướng Dẫn Kiểm Tra</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>.NET SDK</strong></td>
+                <td>.NET 8.0 LTS (hoặc 9.0)</td>
+                <td>Mở Terminal kiểm tra: <code>dotnet --version</code>.</td>
+            </tr>
+            <tr>
+                <td><strong>Hệ Quản Trị CSDL</strong></td>
+                <td>Microsoft SQL Server (MSSQLSERVER)</td>
+                <td>SQL Server 2019/2022 hoặc SQL Server Express đang chạy trên máy (Localhost).</td>
+            </tr>
+            <tr>
+                <td><strong>Công cụ EF Core</strong></td>
+                <td>dotnet-ef CLI</td>
+                <td>Cài đặt toàn cục (nếu chưa có): <code>dotnet tool install --global dotnet-ef</code>.</td>
+            </tr>
+            <tr>
+                <td><strong>Trình Duyệt Web</strong></td>
+                <td>Google Chrome, Edge, Firefox</td>
+                <td>Hỗ trợ WebAssembly và HTML5 hiện đại.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>2. HƯỚNG DẪN CÀI ĐẶT & CHẠY SOURCE CODE</h2>
+
+    <div class="step-box">
+        <strong>BƯỚC 1: KIỂM TRA CHUỖI KẾT NỐI DATABASE</strong><br>
+        Mở tệp <code>src/Presentation/CrmCep.WebApi/appsettings.json</code> để xem chuỗi kết nối:
+    </div>
+    <div class="code-box">
+{
+  "ConnectionStrings": {
+    // Windows Authentication (Mặc định máy local - Không cần mật khẩu):
+    "DefaultConnection": "Server=localhost;Database=CrmCepDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;"
+  }
+}
+    </div>
+    <p><em>(Nếu SQL Server sử dụng tài khoản <code>sa</code> có mật khẩu, bạn chỉ cần thay đổi: <code>Server=localhost;Database=CrmCepDb;User Id=sa;Password=MatKhauCuaBan;TrustServerCertificate=True;MultipleActiveResultSets=true;</code>)</em></p>
+
+    <div class="step-box">
+        <strong>BƯỚC 2: CƠ CHẾ AUTO-MIGRATION & AUTO-SEED DỮ LIỆU</strong><br>
+        Ứng dụng được thiết kế thông minh với cơ chế <strong>Auto-Migration & Seed Data</strong> tự động. Khi chạy Web API, hệ thống sẽ:
+        <ul>
+            <li>Tự động tạo CSDL <code>CrmCepDb</code> nếu chưa tồn tại.</li>
+            <li>Tự động tạo các bảng <code>Customers</code>, <code>Users</code> và bộ chỉ mục Unique Index.</li>
+            <li>Tự động nạp tài khoản Quản trị viên: <strong>admin</strong> / <strong>Admin@123</strong>.</li>
+            <li>Tự động nạp sẵn 5 hồ sơ khách hàng vi mô mẫu (Công nhân, Tiểu thương, Lao động tự do) để kiểm thử ngay.</li>
+        </ul>
+    </div>
+
+    <div class="step-box">
+        <strong>BƯỚC 3: KHỞI CHẠY BACKEND WEB API</strong><br>
+        Mở một cửa sổ Terminal tại thư mục <code>src/Presentation/CrmCep.WebApi</code> và gõ lệnh:
+    </div>
+    <div class="code-box">
+dotnet run
+    </div>
+    <p>Hệ thống Web API sẽ khởi động tại: <strong>https://localhost:7178</strong> (Swagger UI: <strong>https://localhost:7178/swagger</strong>).</p>
+
+    <div class="step-box">
+        <strong>BƯỚC 4: KHỞI CHẠY FRONTEND BLAZOR WEB UI</strong><br>
+        Mở một cửa sổ Terminal thứ hai tại thư mục <code>src/Presentation/CrmCep.BlazorUI</code> và gõ lệnh:
+    </div>
+    <div class="code-box">
+dotnet run
+    </div>
+    <p>Giao diện Web Blazor sẽ chạy tại địa chỉ hiển thị trên màn hình console (thường là <strong>https://localhost:7083</strong> hoặc tương đương).</p>
+
+    <div class="page-break"></div>
+
+    <h2>3. HƯỚNG DẪN SỬ DỤNG PHẦN MỀM (USER GUIDE)</h2>
+
+    <h3>3.1. Đăng Nhập Hệ Thống (Xác Thực JWT)</h3>
+    <ol>
+        <li>Mở trình duyệt truy cập đường dẫn Web Blazor (hoặc điều hướng đến <code>/login</code>).</li>
+        <li>Nhập thông tin tài khoản quản trị viên mặc định:
+            <ul>
+                <li><strong>Tên đăng nhập:</strong> <code>admin</code></li>
+                <li><strong>Mật khẩu:</strong> <code>Admin@123</code></li>
+            </ul>
+        </li>
+        <li>Nhấn nút <strong>"ĐĂNG NHẬP"</strong>. Hệ thống sẽ xác thực với Web API, cấp mã JWT Bearer Token, lưu vào trình duyệt an toàn và tự động chuyển hướng đến màn hình Quản lý Khách hàng.</li>
+    </ol>
+
+    <h3>3.2. Theo Dõi Chỉ Số Thống Kê (Dashboard KPI)</h3>
+    <p>Ngay đầu trang quản trị, hệ thống cung cấp 04 thẻ KPI trực quan cập nhật theo thời gian thực:</p>
+    <ul>
+        <li><strong>Tổng Khách Hàng:</strong> Tổng số hồ sơ khách hàng hiện có trong tổ chức.</li>
+        <li><strong>Đang Hoạt Động:</strong> Số khách hàng đủ điều kiện tham gia các khoản vay/tiết kiệm vi mô.</li>
+        <li><strong>Tạm Ngưng / Khóa:</strong> Số khách hàng đang bị hoãn giao dịch hoặc có rủi ro tín dụng.</li>
+        <li><strong>Mới Trong Tháng:</strong> Số khách hàng mới được phát triển trong tháng hiện tại.</li>
+    </ul>
+
+    <h3>3.3. Tìm Kiếm & Lọc Danh Sách Khách Hàng</h3>
+    <ul>
+        <li><strong>Tìm kiếm tức thời:</strong> Nhập Họ tên (ví dụ: <em>"Hùng"</em>) hoặc Số điện thoại (ví dụ: <em>"0908"</em>) vào ô tìm kiếm và nhấn Enter. Bảng dữ liệu sẽ lọc ngay lập tức.</li>
+        <li><strong>Lọc theo Trạng thái:</strong> Lựa chọn dropdown <em>"Đang hoạt động"</em>, <em>"Tạm ngưng"</em>, hoặc <em>"Đã khóa"</em>.</li>
+        <li><strong>Lọc theo Phân loại đối tượng:</strong> Chọn lọc theo <em>"Công nhân lao động"</em>, <em>"Tiểu thương buôn bán"</em>, hoặc <em>"Lao động tự do"</em>.</li>
+    </ul>
+
+    <h3>3.4. Thêm Mới Hồ Sơ Khách Hàng</h3>
+    <ol>
+        <li>Nhấn nút màu xanh <strong>"Thêm Khách Hàng"</strong> ở thanh công cụ.</li>
+        <li>Hộp thoại nhập liệu mở ra:
+            <ul>
+                <li><strong>Mã Khách Hàng:</strong> Tự động sinh mã chuẩn ngân hàng (ví dụ: <code>KH-2026-XXXX</code>) hoặc có thể nhập theo ý muốn.</li>
+                <li><strong>Họ và Tên:</strong> Nhập họ tên đầy đủ (bắt buộc, 2 - 100 ký tự).</li>
+                <li><strong>Số Điện Thoại:</strong> Nhập số di động 10 chữ số tại Việt Nam (bắt đầu bằng 03, 05, 07, 08, 09). Hệ thống tự động kiểm tra định dạng và báo lỗi nếu trùng lặp.</li>
+                <li><strong>Hộp Thư Email:</strong> Nhập email hợp lệ theo chuẩn RFC.</li>
+                <li><strong>Ngày Sinh:</strong> Chọn ngày sinh trên lịch. Hệ thống khóa chặn những người dưới 18 tuổi nhằm đảm bảo năng lực pháp lý giao dịch vi mô.</li>
+                <li><strong>Phân Loại Đối Tượng & Trạng Thái:</strong> Chọn nhóm ngành nghề và trạng thái hoạt động.</li>
+                <li><strong>Địa Chỉ & Ghi Chú:</strong> Nhập nơi cư trú/làm việc và ghi chú hồ sơ.</li>
+            </ul>
+        </li>
+        <li>Nhấn <strong>"Lưu Hồ Sơ"</strong>. Thông báo Toast màu xanh hiển thị thành công và bản ghi mới xuất hiện ngay trên bảng.</li>
+    </ol>
+
+    <h3>3.5. Chỉnh Sửa Thông Tin Khách Hàng</h3>
+    <ol>
+        <li>Tại dòng khách hàng cần sửa, nhấn vào <strong>Biểu tượng Chiếc Bút (Sửa)</strong> ở cột Thao tác.</li>
+        <li>Hộp thoại chỉnh sửa xuất hiện với đầy đủ thông tin hiện tại (Mã KH được khóa để bảo toàn định danh).</li>
+        <li>Sửa đổi thông tin cần thiết và nhấn <strong>"Cập Nhật"</strong>.</li>
+    </ol>
+
+    <h3>3.6. Xóa Khách Hàng (Cơ Chế Soft Delete An Toàn)</h3>
+    <ol>
+        <li>Nhấn vào <strong>Biểu tượng Thùng Rác (Xóa)</strong> tại dòng khách hàng muốn xóa.</li>
+        <li>Hộp thoại cảnh báo màu đỏ xuất hiện để chống bấm nhầm.</li>
+        <li>Nhấn <strong>"Đồng Ý Xóa"</strong>. Hệ thống sẽ đánh dấu xóa mềm (<code>IsDeleted = true</code>), bảo toàn dữ liệu lịch sử tín dụng trong CSDL vật lý mà không làm mất vết kế toán.</li>
+    </ol>
+
+    <h3>3.7. Xuất Báo Cáo Ra File Excel (.xlsx)</h3>
+    <ol>
+        <li>Nhấn nút <strong>"Xuất Excel"</strong> ở góc trên bên phải thanh công cụ.</li>
+        <li>Hệ thống backend tự động tạo file Microsoft Excel chuẩn định dạng thương hiệu CEP (có màu sắc tiêu đề, căn chỉnh độ rộng cột, kẻ bảng dữ liệu).</li>
+        <li>Trình duyệt sẽ tự động tải file <code>Danh_Sach_Khach_Hang_CEP_YYYYMMDD_HHmm.xlsx</code> về máy tính của bạn.</li>
+    </ol>
+
+    <div style="margin-top: 40px; text-align: right; padding-right: 20px;">
+        <p style="margin: 0; font-style: italic;">TP. Hồ Chí Minh, ngày 15 tháng 09 năm 2026</p>
+        <p style="margin: 5px 0 0 0; font-weight: bold; text-transform: uppercase; color: #004d40;">Tác Giả Phát Triển</p>
+        <p style="margin: 40px 0 0 0; font-weight: bold;">Đàm Văn Phương</p>
+        <p style="margin: 2px 0 0 0; font-size: 11px; color: #666;">Ứng viên Vị trí Chuyên viên Phát triển Phần mềm (.NET/Blazor Developer)</p>
+    </div>
+
+</body>
+</html>
