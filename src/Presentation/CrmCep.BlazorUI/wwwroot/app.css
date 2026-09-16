@@ -49,3 +49,22 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+/* Responsive utilities for mobile & tablet */
+.table-responsive-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+@media (max-width: 600px) {
+    .mud-appbar {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}
+

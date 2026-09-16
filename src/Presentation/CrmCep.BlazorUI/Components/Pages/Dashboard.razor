@@ -16,7 +16,7 @@
         </div>
     </NotAuthorized>
     <Authorized>
-        <div class="d-flex justify-space-between align-center mb-4">
+        <div class="d-flex flex-column flex-sm-row justify-space-between align-start align-sm-center gap-3 mb-4">
             <div>
                 <MudText Typo="Typo.h5" Class="font-weight-bold" Color="Color.Primary">
                     TỔNG QUAN HỆ THỐNG TÍN DỤNG VI MÔ CEP
@@ -25,7 +25,7 @@
                     Báo cáo tổng hợp tình hình hồ sơ khách hàng, phân loại đối tượng và trạng thái hoạt động.
                 </MudText>
             </div>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PeopleAlt" Href="/customers">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PeopleAlt" Href="/customers" Class="flex-shrink-0">
                 Quản Lý Khách Hàng
             </MudButton>
         </div>
@@ -33,52 +33,52 @@
         <!-- 1. 4 Thẻ KPI Chỉ Số Nhanh -->
         <MudGrid Class="mb-4">
             <MudItem xs="12" sm="6" md="3">
-                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #00695C; border-radius: 8px;">
+                <MudPaper Elevation="2" Class="pa-3 pa-sm-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #00695C; border-radius: 8px;">
                     <div>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">TỔNG KHÁCH HÀNG</MudText>
                         <MudText Typo="Typo.h4" Class="font-weight-bold mt-1">@(_stats?.TotalCustomers ?? 0)</MudText>
                         <MudText Typo="Typo.caption" Class="text-success font-weight-bold">100% Hồ sơ vi mô</MudText>
                     </div>
-                    <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large">
+                    <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Medium" Class="ml-2">
                         <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Medium" />
                     </MudAvatar>
                 </MudPaper>
             </MudItem>
 
             <MudItem xs="12" sm="6" md="3">
-                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #2E7D32; border-radius: 8px;">
+                <MudPaper Elevation="2" Class="pa-3 pa-sm-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #2E7D32; border-radius: 8px;">
                     <div>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">ĐANG HOẠT ĐỘNG</MudText>
                         <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-success">@(_stats?.ActiveCustomers ?? 0)</MudText>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary">Đủ điều kiện vay vốn</MudText>
                     </div>
-                    <MudAvatar Color="Color.Success" Variant="Variant.Filled" Size="Size.Large">
+                    <MudAvatar Color="Color.Success" Variant="Variant.Filled" Size="Size.Medium" Class="ml-2">
                         <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Medium" />
                     </MudAvatar>
                 </MudPaper>
             </MudItem>
 
             <MudItem xs="12" sm="6" md="3">
-                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #F57C00; border-radius: 8px;">
+                <MudPaper Elevation="2" Class="pa-3 pa-sm-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #F57C00; border-radius: 8px;">
                     <div>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">TẠM NGƯNG / KHÓA</MudText>
                         <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-warning">@((_stats?.SuspendedCustomers ?? 0) + (_stats?.LockedCustomers ?? 0))</MudText>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary">Cần xác minh thêm</MudText>
                     </div>
-                    <MudAvatar Color="Color.Warning" Variant="Variant.Filled" Size="Size.Large">
+                    <MudAvatar Color="Color.Warning" Variant="Variant.Filled" Size="Size.Medium" Class="ml-2">
                         <MudIcon Icon="@Icons.Material.Filled.PauseCircle" Size="Size.Medium" />
                     </MudAvatar>
                 </MudPaper>
             </MudItem>
 
             <MudItem xs="12" sm="6" md="3">
-                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #0288D1; border-radius: 8px;">
+                <MudPaper Elevation="2" Class="pa-3 pa-sm-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #0288D1; border-radius: 8px;">
                     <div>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">MỚI TRONG THÁNG</MudText>
                         <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-info">@(_stats?.NewCustomersThisMonth ?? 0)</MudText>
                         <MudText Typo="Typo.caption" Class="text-info font-weight-bold">Tăng trưởng tháng @DateTime.Now.Month</MudText>
                     </div>
-                    <MudAvatar Color="Color.Info" Variant="Variant.Filled" Size="Size.Large">
+                    <MudAvatar Color="Color.Info" Variant="Variant.Filled" Size="Size.Medium" Class="ml-2">
                         <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Medium" />
                     </MudAvatar>
                 </MudPaper>
@@ -100,34 +100,34 @@
                     </MudCardHeader>
                     <MudCardContent Class="pt-0">
                         <div class="mb-4">
-                            <div class="d-flex justify-space-between align-center mb-1">
+                            <div class="d-flex justify-space-between align-center flex-wrap gap-1 mb-1">
                                 <span class="d-flex align-center">
                                     <MudIcon Icon="@Icons.Material.Filled.Engineering" Color="Color.Primary" Size="Size.Small" Class="mr-2" />
                                     <strong>Công nhân</strong>
                                 </span>
-                                <span><strong>@_workerCount</strong> hồ sơ (@_workerPct.ToString("0.0")%)</span>
+                                <span class="text-nowrap"><strong>@_workerCount</strong> hồ sơ (@_workerPct.ToString("0.0")%)</span>
                             </div>
                             <MudProgressLinear Color="Color.Primary" Value="@_workerPct" Size="Size.Medium" Rounded="true" />
                         </div>
 
                         <div class="mb-4">
-                            <div class="d-flex justify-space-between align-center mb-1">
+                            <div class="d-flex justify-space-between align-center flex-wrap gap-1 mb-1">
                                 <span class="d-flex align-center">
                                     <MudIcon Icon="@Icons.Material.Filled.Storefront" Color="Color.Warning" Size="Size.Small" Class="mr-2" />
                                     <strong>Tiểu thương chợ & buôn bán nhỏ</strong>
                                 </span>
-                                <span><strong>@_merchantCount</strong> hồ sơ (@_merchantPct.ToString("0.0")%)</span>
+                                <span class="text-nowrap"><strong>@_merchantCount</strong> hồ sơ (@_merchantPct.ToString("0.0")%)</span>
                             </div>
                             <MudProgressLinear Color="Color.Warning" Value="@_merchantPct" Size="Size.Medium" Rounded="true" />
                         </div>
 
                         <div>
-                            <div class="d-flex justify-space-between align-center mb-1">
+                            <div class="d-flex justify-space-between align-center flex-wrap gap-1 mb-1">
                                 <span class="d-flex align-center">
                                     <MudIcon Icon="@Icons.Material.Filled.Handyman" Color="Color.Info" Size="Size.Small" Class="mr-2" />
                                     <strong>Lao động tự do</strong>
                                 </span>
-                                <span><strong>@_freelanceCount</strong> hồ sơ (@_freelancePct.ToString("0.0")%)</span>
+                                <span class="text-nowrap"><strong>@_freelanceCount</strong> hồ sơ (@_freelancePct.ToString("0.0")%)</span>
                             </div>
                             <MudProgressLinear Color="Color.Info" Value="@_freelancePct" Size="Size.Medium" Rounded="true" />
                         </div>
@@ -148,34 +148,34 @@
                     </MudCardHeader>
                     <MudCardContent Class="pt-0">
                         <div class="mb-4">
-                            <div class="d-flex justify-space-between align-center mb-1">
+                            <div class="d-flex justify-space-between align-center flex-wrap gap-1 mb-1">
                                 <span class="d-flex align-center">
                                     <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" Class="mr-2" />
                                     <strong>Đang hoạt động (Đủ điều kiện vay)</strong>
                                 </span>
-                                <span><strong>@(_stats?.ActiveCustomers ?? 0)</strong> hồ sơ (@_activePct.ToString("0.0")%)</span>
+                                <span class="text-nowrap"><strong>@(_stats?.ActiveCustomers ?? 0)</strong> hồ sơ (@_activePct.ToString("0.0")%)</span>
                             </div>
                             <MudProgressLinear Color="Color.Success" Value="@_activePct" Size="Size.Medium" Rounded="true" />
                         </div>
 
                         <div class="mb-4">
-                            <div class="d-flex justify-space-between align-center mb-1">
+                            <div class="d-flex justify-space-between align-center flex-wrap gap-1 mb-1">
                                 <span class="d-flex align-center">
                                     <MudIcon Icon="@Icons.Material.Filled.PauseCircle" Color="Color.Warning" Size="Size.Small" Class="mr-2" />
                                     <strong>Tạm ngưng (Chờ tất toán / đối soát)</strong>
                                 </span>
-                                <span><strong>@(_stats?.SuspendedCustomers ?? 0)</strong> hồ sơ (@_suspendedPct.ToString("0.0")%)</span>
+                                <span class="text-nowrap"><strong>@(_stats?.SuspendedCustomers ?? 0)</strong> hồ sơ (@_suspendedPct.ToString("0.0")%)</span>
                             </div>
                             <MudProgressLinear Color="Color.Warning" Value="@_suspendedPct" Size="Size.Medium" Rounded="true" />
                         </div>
 
                         <div>
-                            <div class="d-flex justify-space-between align-center mb-1">
+                            <div class="d-flex justify-space-between align-center flex-wrap gap-1 mb-1">
                                 <span class="d-flex align-center">
                                     <MudIcon Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" Size="Size.Small" Class="mr-2" />
                                     <strong>Đã khóa (Vi phạm chính sách)</strong>
                                 </span>
-                                <span><strong>@(_stats?.LockedCustomers ?? 0)</strong> hồ sơ (@_lockedPct.ToString("0.0")%)</span>
+                                <span class="text-nowrap"><strong>@(_stats?.LockedCustomers ?? 0)</strong> hồ sơ (@_lockedPct.ToString("0.0")%)</span>
                             </div>
                             <MudProgressLinear Color="Color.Error" Value="@_lockedPct" Size="Size.Medium" Rounded="true" />
                         </div>
@@ -186,7 +186,7 @@
 
         <!-- 3. Bảng Top 5 Khách Hàng Mới Nhất -->
         <MudCard Elevation="2" Style="border-radius: 8px;">
-            <MudCardHeader Class="d-flex justify-space-between align-center">
+            <MudCardHeader Class="d-flex flex-column flex-sm-row justify-space-between align-start align-sm-center gap-2">
                 <CardHeaderAvatar>
                     <MudAvatar Color="Color.Primary" Size="Size.Small"><MudIcon Icon="@Icons.Material.Filled.History" Size="Size.Small" /></MudAvatar>
                 </CardHeaderAvatar>
@@ -195,38 +195,40 @@
                     <MudText Typo="Typo.caption" Class="mud-text-secondary">Hồ sơ khách hàng cập nhật mới nhất</MudText>
                 </CardHeaderContent>
                 <CardHeaderActions>
-                    <MudButton Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowForward" Href="/customers">
+                    <MudButton Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowForward" Href="/customers" Class="mt-1 mt-sm-0">
                         Xem Tất Cả Hồ Sơ
                     </MudButton>
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCardContent Class="pa-0">
-                <MudTable Items="@_recentCustomers" Dense="true" Hover="true" Striped="true" Elevation="0">
-                    <HeaderContent>
-                        <MudTh>Mã KH</MudTh>
-                        <MudTh>Họ và Tên</MudTh>
-                        <MudTh>Số Điện Thoại</MudTh>
-                        <MudTh>Phân Loại</MudTh>
-                        <MudTh>Trạng Thái</MudTh>
-                        <MudTh>Ngày Đăng Ký</MudTh>
-                    </HeaderContent>
-                    <RowTemplate Context="item">
-                        <MudTd><strong>@item.CustomerCode</strong></MudTd>
-                        <MudTd>@item.FullName</MudTd>
-                        <MudTd>@item.PhoneNumber</MudTd>
-                        <MudTd>
-                            <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetSegmentColor(item.Segment)">
-                                @GetSegmentName(item.Segment)
-                            </MudChip>
-                        </MudTd>
-                        <MudTd>
-                            <MudChip T="string" Size="Size.Small" Variant="Variant.Filled" Color="@GetStatusColor(item.Status)">
-                                @GetStatusName(item.Status)
-                            </MudChip>
-                        </MudTd>
-                        <MudTd>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</MudTd>
-                    </RowTemplate>
-                </MudTable>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                    <MudTable Items="@_recentCustomers" Dense="true" Hover="true" Striped="true" Elevation="0" Breakpoint="Breakpoint.None">
+                        <HeaderContent>
+                            <MudTh>Mã KH</MudTh>
+                            <MudTh>Họ và Tên</MudTh>
+                            <MudTh>Số Điện Thoại</MudTh>
+                            <MudTh>Phân Loại</MudTh>
+                            <MudTh>Trạng Thái</MudTh>
+                            <MudTh>Ngày Đăng Ký</MudTh>
+                        </HeaderContent>
+                        <RowTemplate Context="item">
+                            <MudTd DataLabel="Mã KH"><strong>@item.CustomerCode</strong></MudTd>
+                            <MudTd DataLabel="Họ và Tên">@item.FullName</MudTd>
+                            <MudTd DataLabel="Số Điện Thoại">@item.PhoneNumber</MudTd>
+                            <MudTd DataLabel="Phân Loại">
+                                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetSegmentColor(item.Segment)">
+                                    @GetSegmentName(item.Segment)
+                                </MudChip>
+                            </MudTd>
+                            <MudTd DataLabel="Trạng Thái">
+                                <MudChip T="string" Size="Size.Small" Variant="Variant.Filled" Color="@GetStatusColor(item.Status)">
+                                    @GetStatusName(item.Status)
+                                </MudChip>
+                            </MudTd>
+                            <MudTd DataLabel="Ngày Đăng Ký">@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </div>
             </MudCardContent>
         </MudCard>
     </Authorized>

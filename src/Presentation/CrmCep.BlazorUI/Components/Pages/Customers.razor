@@ -19,7 +19,7 @@
         </div>
     </NotAuthorized>
     <Authorized>
-        <div class="d-flex justify-space-between align-center mb-4">
+        <div class="d-flex flex-column flex-sm-row justify-space-between align-start align-sm-center gap-3 mb-4">
             <div>
                 <MudText Typo="Typo.h5" Class="font-weight-bold" Color="Color.Primary">
                     QUẢN LÝ DANH SÁCH KHÁCH HÀNG
@@ -28,7 +28,7 @@
                     Tra cứu thông tin, thêm mới hồ sơ, chỉnh sửa và quản lý tình trạng khách hàng CEP.
                 </MudText>
             </div>
-            <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Dashboard" Href="/">
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Dashboard" Href="/" Class="flex-shrink-0">
                 Xem Tổng Quan CRM
             </MudButton>
         </div>
@@ -36,49 +36,49 @@
         <!-- 1. KPI Dashboard Summary Cards -->
         <MudGrid Class="mb-4">
             <MudItem xs="12" sm="6" md="3">
-                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #00695C; border-radius: 8px;">
+                <MudPaper Elevation="2" Class="pa-3 pa-sm-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #00695C; border-radius: 8px;">
                     <div>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">TỔNG KHÁCH HÀNG</MudText>
                         <MudText Typo="Typo.h4" Class="font-weight-bold mt-1">@(_stats?.TotalCustomers ?? 0)</MudText>
                     </div>
-                    <MudAvatar Color="Color.Primary" Variant="Variant.Filled">
-                        <MudIcon Icon="@Icons.Material.Filled.People" />
+                    <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Medium" Class="ml-2">
+                        <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Medium" />
                     </MudAvatar>
                 </MudPaper>
             </MudItem>
 
             <MudItem xs="12" sm="6" md="3">
-                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #2E7D32; border-radius: 8px;">
+                <MudPaper Elevation="2" Class="pa-3 pa-sm-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #2E7D32; border-radius: 8px;">
                     <div>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">ĐANG HOẠT ĐỘNG</MudText>
                         <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-success">@(_stats?.ActiveCustomers ?? 0)</MudText>
                     </div>
-                    <MudAvatar Color="Color.Success" Variant="Variant.Filled">
-                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" />
+                    <MudAvatar Color="Color.Success" Variant="Variant.Filled" Size="Size.Medium" Class="ml-2">
+                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Medium" />
                     </MudAvatar>
                 </MudPaper>
             </MudItem>
 
             <MudItem xs="12" sm="6" md="3">
-                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #F57C00; border-radius: 8px;">
+                <MudPaper Elevation="2" Class="pa-3 pa-sm-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #F57C00; border-radius: 8px;">
                     <div>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">TẠM NGƯNG / KHÓA</MudText>
                         <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-warning">@((_stats?.SuspendedCustomers ?? 0) + (_stats?.LockedCustomers ?? 0))</MudText>
                     </div>
-                    <MudAvatar Color="Color.Warning" Variant="Variant.Filled">
-                        <MudIcon Icon="@Icons.Material.Filled.PauseCircle" />
+                    <MudAvatar Color="Color.Warning" Variant="Variant.Filled" Size="Size.Medium" Class="ml-2">
+                        <MudIcon Icon="@Icons.Material.Filled.PauseCircle" Size="Size.Medium" />
                     </MudAvatar>
                 </MudPaper>
             </MudItem>
 
             <MudItem xs="12" sm="6" md="3">
-                <MudPaper Elevation="2" Class="pa-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #0288D1; border-radius: 8px;">
+                <MudPaper Elevation="2" Class="pa-3 pa-sm-4 d-flex justify-space-between align-center" Style="border-left: 5px solid #0288D1; border-radius: 8px;">
                     <div>
                         <MudText Typo="Typo.caption" Class="mud-text-secondary font-weight-bold">MỚI TRONG THÁNG</MudText>
                         <MudText Typo="Typo.h4" Class="font-weight-bold mt-1 text-info">@(_stats?.NewCustomersThisMonth ?? 0)</MudText>
                     </div>
-                    <MudAvatar Color="Color.Info" Variant="Variant.Filled">
-                        <MudIcon Icon="@Icons.Material.Filled.PersonAdd" />
+                    <MudAvatar Color="Color.Info" Variant="Variant.Filled" Size="Size.Medium" Class="ml-2">
+                        <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Size="Size.Medium" />
                     </MudAvatar>
                 </MudPaper>
             </MudItem>
@@ -87,7 +87,7 @@
         <!-- 2. Action & Filter Bar -->
         <MudCard Elevation="2" Class="mb-4 pa-3" Style="border-radius: 8px;">
             <MudGrid Spacing="2" Class="align-center">
-                <MudItem xs="12" sm="4" md="4">
+                <MudItem xs="12" sm="6" md="4">
                     <MudTextField @bind-Value="_filter.Keyword" 
                                   Placeholder="Tìm theo Họ tên hoặc Số điện thoại..." 
                                   Adornment="Adornment.Start" 
@@ -116,17 +116,19 @@
                     </MudSelect>
                 </MudItem>
 
-                <MudItem xs="12" sm="12" md="4" Class="d-flex justify-end gap-2">
+                <MudItem xs="12" sm="12" md="4" Class="d-flex flex-wrap justify-stretch justify-md-end gap-2">
                     <MudButton Variant="Variant.Filled" 
                                Color="Color.Primary" 
                                StartIcon="@Icons.Material.Filled.AddCircle" 
-                               OnClick="OpenAddDialog">
+                               OnClick="OpenAddDialog"
+                               Class="flex-grow-1 flex-md-grow-0">
                         Thêm Khách Hàng
                     </MudButton>
                     <MudButton Variant="Variant.Outlined" 
                                Color="Color.Success" 
                                StartIcon="@Icons.Material.Filled.Download" 
-                               OnClick="ExportToExcel">
+                               OnClick="ExportToExcel"
+                               Class="flex-grow-1 flex-md-grow-0">
                         Xuất Excel
                     </MudButton>
                 </MudItem>
@@ -134,78 +136,86 @@
         </MudCard>
 
         <!-- 3. Customer Data Table (MudTable) -->
-        <MudTable Items="@_customers" 
-                  Dense="true" 
-                  Hover="true" 
-                  Bordered="true" 
-                  Striped="true" 
-                  Loading="@_isLoading" 
-                  Elevation="2" 
-                  Style="border-radius: 8px;">
-            <ToolBarContent>
-                <MudText Typo="Typo.h6" Class="font-weight-bold">DANH SÁCH HỒ SƠ KHÁCH HÀNG</MudText>
-                <MudSpacer />
-                <MudText Typo="Typo.body2" Class="mud-text-secondary">Tổng số bản ghi: <strong>@_totalCount</strong></MudText>
-            </ToolBarContent>
-            <HeaderContent>
-                <MudTh><MudTableSortLabel SortBy="new Func<CustomerDto, object>(x => x.CustomerCode)">Mã KH</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<CustomerDto, object>(x => x.FullName)">Họ và Tên</MudTableSortLabel></MudTh>
-                <MudTh>Số Điện Thoại</MudTh>
-                <MudTh>Hộp Thư Email</MudTh>
-                <MudTh>Ngày Sinh</MudTh>
-                <MudTh>Phân Loại</MudTh>
-                <MudTh>Trạng Thái</MudTh>
-                <MudTh Style="text-align: center;">Thao Tác</MudTh>
-            </HeaderContent>
-            <RowTemplate Context="customer">
-                <MudTd DataLabel="Mã KH">
-                    <MudChip T="string" Size="Size.Small" Color="Color.Dark" Variant="Variant.Text"><strong>@customer.CustomerCode</strong></MudChip>
-                </MudTd>
-                <MudTd DataLabel="Họ và Tên"><strong>@customer.FullName</strong></MudTd>
-                <MudTd DataLabel="Số Điện Thoại">
-                    <div class="d-flex align-center">
-                        <MudIcon Icon="@Icons.Material.Filled.Phone" Size="Size.Small" Color="Color.Primary" Class="mr-1" />
-                        <span>@customer.PhoneNumber</span>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+            <MudTable Items="@_customers" 
+                      Dense="true" 
+                      Hover="true" 
+                      Bordered="true" 
+                      Striped="true" 
+                      Loading="@_isLoading" 
+                      Elevation="2" 
+                      Breakpoint="Breakpoint.None"
+                      Style="border-radius: 8px;">
+                <ToolBarContent>
+                    <div class="d-flex flex-column flex-sm-row justify-space-between align-start align-sm-center w-100 py-2 gap-1">
+                        <MudText Typo="Typo.h6" Class="font-weight-bold">DANH SÁCH HỒ SƠ KHÁCH HÀNG</MudText>
+                        <MudText Typo="Typo.body2" Class="mud-text-secondary">Tổng số bản ghi: <strong>@_totalCount</strong></MudText>
                     </div>
-                </MudTd>
-                <MudTd DataLabel="Hộp Thư Email">@(customer.Email ?? "—")</MudTd>
-                <MudTd DataLabel="Ngày Sinh">@customer.DateOfBirth.ToString("dd/MM/yyyy")</MudTd>
-                <MudTd DataLabel="Phân Loại">
-                    <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetSegmentColor(customer.Segment)">
-                        @GetSegmentName(customer.Segment)
-                    </MudChip>
-                </MudTd>
-                <MudTd DataLabel="Trạng Thái">
-                    <MudChip T="string" Size="Size.Small" Variant="Variant.Filled" Color="@GetStatusColor(customer.Status)">
-                        @GetStatusName(customer.Status)
-                    </MudChip>
-                </MudTd>
-                <MudTd DataLabel="Thao Tác" Style="text-align: center;">
-                    <MudTooltip Text="Chỉnh sửa thông tin">
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" OnClick="@(() => OpenEditDialog(customer))" />
-                    </MudTooltip>
-                    <MudTooltip Text="Xóa khách hàng">
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => OpenDeleteDialog(customer))" />
-                    </MudTooltip>
-                </MudTd>
-            </RowTemplate>
-            <NoRecordsContent>
-                <div class="pa-4 text-center">
-                    <MudText Typo="Typo.body1" Class="mud-text-secondary">Không tìm thấy khách hàng nào phù hợp với điều kiện tìm kiếm.</MudText>
-                </div>
-            </NoRecordsContent>
-            <LoadingContent>
-                <div class="pa-4 text-center">
-                    <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
-                    <MudText Typo="Typo.body2" Class="mt-2">Đang tải dữ liệu khách hàng...</MudText>
-                </div>
-            </LoadingContent>
-            <PagerContent>
-                <MudPagination SelectedChanged="OnPageChanged" 
-                               Count="@((int)Math.Ceiling((double)_totalCount / _filter.PageSize))" 
-                               Class="pa-4 justify-center" />
-            </PagerContent>
-        </MudTable>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh><MudTableSortLabel SortBy="new Func<CustomerDto, object>(x => x.CustomerCode)">Mã KH</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<CustomerDto, object>(x => x.FullName)">Họ và Tên</MudTableSortLabel></MudTh>
+                    <MudTh>Số Điện Thoại</MudTh>
+                    <MudTh>Hộp Thư Email</MudTh>
+                    <MudTh>Ngày Sinh</MudTh>
+                    <MudTh>Phân Loại</MudTh>
+                    <MudTh>Trạng Thái</MudTh>
+                    <MudTh Style="text-align: center;">Thao Tác</MudTh>
+                </HeaderContent>
+                <RowTemplate Context="customer">
+                    <MudTd DataLabel="Mã KH">
+                        <MudChip T="string" Size="Size.Small" Color="Color.Dark" Variant="Variant.Text"><strong>@customer.CustomerCode</strong></MudChip>
+                    </MudTd>
+                    <MudTd DataLabel="Họ và Tên"><strong>@customer.FullName</strong></MudTd>
+                    <MudTd DataLabel="Số Điện Thoại">
+                        <div class="d-flex align-center text-nowrap">
+                            <MudIcon Icon="@Icons.Material.Filled.Phone" Size="Size.Small" Color="Color.Primary" Class="mr-1" />
+                            <span>@customer.PhoneNumber</span>
+                        </div>
+                    </MudTd>
+                    <MudTd DataLabel="Hộp Thư Email">@(customer.Email ?? "—")</MudTd>
+                    <MudTd DataLabel="Ngày Sinh">@customer.DateOfBirth.ToString("dd/MM/yyyy")</MudTd>
+                    <MudTd DataLabel="Phân Loại">
+                        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="@GetSegmentColor(customer.Segment)">
+                            @GetSegmentName(customer.Segment)
+                        </MudChip>
+                    </MudTd>
+                    <MudTd DataLabel="Trạng Thái">
+                        <MudChip T="string" Size="Size.Small" Variant="Variant.Filled" Color="@GetStatusColor(customer.Status)">
+                            @GetStatusName(customer.Status)
+                        </MudChip>
+                    </MudTd>
+                    <MudTd DataLabel="Thao Tác" Style="text-align: center;">
+                        <div class="d-flex justify-center text-nowrap">
+                            <MudTooltip Text="Chỉnh sửa thông tin">
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" OnClick="@(() => OpenEditDialog(customer))" />
+                            </MudTooltip>
+                            <MudTooltip Text="Xóa khách hàng">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => OpenDeleteDialog(customer))" />
+                            </MudTooltip>
+                        </div>
+                    </MudTd>
+                </RowTemplate>
+                <NoRecordsContent>
+                    <div class="pa-4 text-center">
+                        <MudText Typo="Typo.body1" Class="mud-text-secondary">Không tìm thấy khách hàng nào phù hợp với điều kiện tìm kiếm.</MudText>
+                    </div>
+                </NoRecordsContent>
+                <LoadingContent>
+                    <div class="pa-4 text-center">
+                        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+                        <MudText Typo="Typo.body2" Class="mt-2">Đang tải dữ liệu khách hàng...</MudText>
+                    </div>
+                </LoadingContent>
+                <PagerContent>
+                    <div class="d-flex justify-center pa-2 pa-sm-4" style="overflow-x: auto;">
+                        <MudPagination SelectedChanged="OnPageChanged" 
+                                       Count="@((int)Math.Ceiling((double)_totalCount / _filter.PageSize))" 
+                                       Size="Size.Small" />
+                    </div>
+                </PagerContent>
+            </MudTable>
+        </div>
     </Authorized>
 </AuthorizeView>
 

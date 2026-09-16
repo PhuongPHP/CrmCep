@@ -13,22 +13,35 @@
 <MudLayout>
     <MudAppBar Elevation="2" Color="Color.Primary" Dense="false">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(() => _drawerOpen = !_drawerOpen)" />
-        <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Class="mr-2" />
-        <MudText Typo="Typo.h6" Class="font-weight-bold">CEP MICROFINANCE CRM</MudText>
+        <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Class="mr-2 d-none d-sm-inline-flex" />
+        <MudText Typo="Typo.h6" Class="font-weight-bold text-nowrap d-none d-sm-inline">CEP MICROFINANCE CRM</MudText>
+        <MudText Typo="Typo.subtitle1" Class="font-weight-bold text-nowrap d-inline d-sm-none">CEP CRM</MudText>
         <MudSpacer />
 
         <AuthorizeView>
             <Authorized>
-                <MudChip T="string" Color="Color.Success" Variant="Variant.Filled" Size="Size.Small" Icon="@Icons.Material.Filled.VerifiedUser">
-                    @context.User.Identity?.Name (Quản Trị Viên)
-                </MudChip>
+                <div class="d-none d-md-inline-flex">
+                    <MudChip T="string" Color="Color.Success" Variant="Variant.Filled" Size="Size.Small" Icon="@Icons.Material.Filled.VerifiedUser">
+                        @context.User.Identity?.Name (Quản Trị Viên)
+                    </MudChip>
+                </div>
+                <div class="d-none d-sm-inline-flex d-md-none">
+                    <MudChip T="string" Color="Color.Success" Variant="Variant.Filled" Size="Size.Small" Icon="@Icons.Material.Filled.VerifiedUser">
+                        @context.User.Identity?.Name
+                    </MudChip>
+                </div>
                 <MudTooltip Text="Chuyển đổi Sáng / Tối">
                     <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" 
                                    Color="Color.Inherit" OnClick="@(() => _isDarkMode = !_isDarkMode)" />
                 </MudTooltip>
-                <MudButton Variant="Variant.Outlined" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Logout" OnClick="HandleLogout" Class="ml-2">
+                <!-- Desktop Logout Button -->
+                <MudButton Variant="Variant.Outlined" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Logout" OnClick="HandleLogout" Class="d-none d-sm-inline-flex ml-2">
                     Đăng xuất
                 </MudButton>
+                <!-- Mobile Logout Icon Button -->
+                <MudTooltip Text="Đăng xuất">
+                    <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" OnClick="HandleLogout" Class="d-inline-flex d-sm-none" />
+                </MudTooltip>
             </Authorized>
             <NotAuthorized>
                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Login" Href="/login">
@@ -38,7 +51,14 @@
         </AuthorizeView>
     </MudAppBar>
 
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Breakpoint="Breakpoint.Md" Variant="DrawerVariant.Responsive">
+        <MudDrawerHeader Class="d-flex d-md-none align-center justify-space-between px-4 py-2" Style="background-color: var(--mud-palette-primary); color: white;">
+            <div class="d-flex align-center">
+                <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Class="mr-2" />
+                <MudText Typo="Typo.subtitle1" Class="font-weight-bold">CEP CRM</MudText>
+            </div>
+            <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" Size="Size.Small" OnClick="@(() => _drawerOpen = false)" />
+        </MudDrawerHeader>
         <MudNavMenu Class="pa-2">
             <MudText Typo="Typo.caption" Class="px-4 py-2 mud-text-secondary font-weight-bold">ĐIỀU HƯỚNG CHÍNH</MudText>
             <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Tổng Quan CRM</MudNavLink>
@@ -49,7 +69,7 @@
         </MudNavMenu>
     </MudDrawer>
 
-    <MudMainContent Class="pa-4 pa-md-6" Style="background-color: var(--mud-palette-background-grey); min-height: 100vh;">
+    <MudMainContent Class="px-3 px-sm-4 px-md-6 pb-6" Style="background-color: var(--mud-palette-background-grey); min-height: 100vh; padding-top: calc(var(--mud-appbar-height) + 1.25rem) !important;">
         @Body
     </MudMainContent>
 </MudLayout>
