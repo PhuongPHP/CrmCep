@@ -181,7 +181,7 @@ Mở file `src/Presentation/CrmCep.WebApi/appsettings.json` để lựa chọn p
 cd src/Presentation/CrmCep.WebApi
 dotnet run
 ```
-- Swagger UI kiểm thử trực tiếp: `https://localhost:7083/swagger` (hoặc cổng HTTP hiển thị trên màn hình terminal).
+- Swagger UI kiểm thử trực tiếp: `http://localhost:5034/swagger` (hoặc `https://localhost:7178/swagger` khi chạy profile HTTPS).
 
 ---
 
@@ -191,7 +191,7 @@ Mở một cửa sổ Terminal mới:
 cd src/Presentation/CrmCep.BlazorUI
 dotnet run
 ```
-- Giao diện người dùng: Mở trình duyệt truy cập đường dẫn xuất hiện trên console (ví dụ: `https://localhost:7198`).
+- Giao diện người dùng: Mở trình duyệt truy cập `http://localhost:5105` (hoặc `https://localhost:7211` khi chạy profile HTTPS).
 
 ### Bước 5: Đăng Nhập Hệ Thống
 - **Tên đăng nhập:** `admin`
